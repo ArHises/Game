@@ -6,19 +6,27 @@ public class EnemyGenerator : MonoBehaviour
 {
     public GameObject enemyPrefab; // The enemy prefab to be instantiated
     public float spawnInterval = 1f; // Time interval between spawns in seconds
-    public int enemyAmount = 3;
+    public int numberOfEnemies = 5;
+    private Room currentRoom;
 
     void Start()
     {
-        StartCoroutine(SpawnEnemies());
+        currentRoom = GetComponentInParent<Room>(); // Assuming the spawner is a child of the room prefab
+        SpawnEnemies();
     }
 
-    IEnumerator SpawnEnemies()
+    void SpawnEnemies()
     {
-        for (int i = 0; i < enemyAmount; i++)
+        for (int i = 0; i < numberOfEnemies; i++)
         {
-            Instantiate(enemyPrefab, transform.position, Quaternion.identity);
-            yield return new WaitForSeconds(spawnInterval);
+            GameObject enemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
+            enemy.GetComponent<Enemy>().OnEnemyDeath += EnemyKilled;
+            currentRoom.enemyCount++;
         }
+    }
+
+    void EnemyKilled()
+    {
+        currentRoom.EnemyKilled();
     }
 }
