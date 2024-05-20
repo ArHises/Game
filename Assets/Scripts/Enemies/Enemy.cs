@@ -24,8 +24,11 @@ public class Enemy : MonoBehaviour
         Vector2 direction = (player.position - transform.position).normalized;
         GetComponent<Rigidbody2D>().velocity = direction * moveSpeed;
 
-        targetTime -= Time.deltaTime;
-        if (targetTime <= 0.0f && sr.color != Color.white)
+        if (targetTime > 0f)
+        {
+            targetTime -= Time.deltaTime;
+        }
+        else if (targetTime <= 0.0f && sr.color != Color.white)
         {
             sr.color = Color.white;
         }
@@ -33,7 +36,7 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        targetTime += 0.4f;
+        targetTime += 0.15f;
         sr.color = Color.red;
         currentHealth -= damage;
         if (currentHealth <= 0)
