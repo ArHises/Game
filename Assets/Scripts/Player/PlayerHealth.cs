@@ -5,7 +5,7 @@ public class PlayerHealth : MonoBehaviour
 {
     public int maxHealth = 100;
     private int currentHealth;
-    //public HealthBar healthBar; // Reference to a UI health bar
+    public HealthBar healthBar; // Reference to a UI health bar
 
     private float targetTime = 0.0f;
     private SpriteRenderer sr;
@@ -14,7 +14,7 @@ public class PlayerHealth : MonoBehaviour
     {
         currentHealth = maxHealth;
         sr = GetComponent<SpriteRenderer>();
-        //healthBar.SetMaxHealth(maxHealth);
+        healthBar.SetMaxHealth(maxHealth);
     }
 
     private void Update()
@@ -32,9 +32,11 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+
         targetTime += 0.15f;
         sr.color = Color.red;
-        //healthBar.SetHealth(currentHealth);
+        healthBar.SetHealth(currentHealth);
+
         Debug.Log("Player Health: " + currentHealth);
 
         if (currentHealth <= 0)

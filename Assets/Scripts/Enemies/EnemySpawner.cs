@@ -1,26 +1,30 @@
 using UnityEngine;
+using System.Collections;
 
 public class EnemySpawner : MonoBehaviour
 {
     public GameObject enemyPrefab;
     public float spawnInterval = 1f;
-    public Transform[] spawnPoints;
+    public int totalSpawnCount = 3;
+    private Transform spawnPoint;
 
-    private float timeSinceLastSpawn;
-
-    void Update()
+    private void Start()
     {
-        timeSinceLastSpawn += Time.deltaTime;
-        if (timeSinceLastSpawn >= spawnInterval)
+        spawnPoint = gameObject.GetComponent<Transform>();
+        StartCoroutine(SpawnEnemies());
+    }
+
+    private IEnumerator SpawnEnemies()
+    {
+        for (int i = 0; i < totalSpawnCount; i++)
         {
             SpawnEnemy();
-            timeSinceLastSpawn = 0f;
+            yield return new WaitForSeconds(spawnInterval);
         }
     }
 
     void SpawnEnemy()
     {
-        int spawnIndex = Random.Range(0, spawnPoints.Length);
-        Instantiate(enemyPrefab, spawnPoints[spawnIndex].position, Quaternion.identity);
+        Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity);
     }
 }
