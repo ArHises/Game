@@ -2,53 +2,20 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public int maxHealth = 50;
-    private int currentHealth;
+    public int EnemyDamage = 10;
 
     public float moveSpeed = 3f;
     private Transform player;
 
-    private SpriteRenderer sr;
-
-    private float targetTime = 0.0f;
-
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        sr = GetComponent<SpriteRenderer>();
-        currentHealth = maxHealth;
     }
 
     void Update()
     {
         Vector2 direction = (player.position - transform.position).normalized;
         GetComponent<Rigidbody2D>().velocity = direction * moveSpeed;
-
-        if (targetTime > 0f)
-        {
-            targetTime -= Time.deltaTime;
-        }
-        else if (targetTime <= 0.0f && sr.color != Color.white)
-        {
-            sr.color = Color.white;
-        }
-    }
-
-    public void TakeDamage(int damage)
-    {
-        targetTime += 0.15f;
-        sr.color = Color.red;
-        currentHealth -= damage;
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
-    }
-
-    void Die()
-    {
-        // Optionally play a death animation or sound here
-        Destroy(gameObject);
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -56,9 +23,10 @@ public class Enemy : MonoBehaviour
         if (collision.CompareTag("Projectile"))
         {
             Projectile projectile = collision.GetComponent<Projectile>();
+            EnemyHealth EnemyHealth = GetComponent<EnemyHealth>();
             if (projectile != null)
             {
-                TakeDamage(projectile.damage);
+                EnemyHealth.TakeDamage(projectile.damage);
             }
         }
 
@@ -67,7 +35,7 @@ public class Enemy : MonoBehaviour
             PlayerHealth playerHealth = collision.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
-                playerHealth.TakeDamage(10); // Assume the enemy deals 10 damage on contact
+                playerHealth.TakeDamage(EnemyDamage);
             }
         }
     }
