@@ -9,13 +9,17 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        if (GameObject.FindGameObjectWithTag("Player") != null) {
+            player = GameObject.FindGameObjectWithTag("Player").transform;
+        }
     }
 
     void Update()
     {
-        Vector2 direction = (player.position - transform.position).normalized;
-        GetComponent<Rigidbody2D>().velocity = direction * moveSpeed;
+        if (player != null) {
+            Vector2 direction = (player.position - transform.position).normalized;
+            GetComponent<Rigidbody2D>().velocity = direction * moveSpeed;
+        }
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -23,10 +27,10 @@ public class Enemy : MonoBehaviour
         if (collision.CompareTag("Projectile"))
         {
             Projectile projectile = collision.GetComponent<Projectile>();
-            EnemyHealth EnemyHealth = GetComponent<EnemyHealth>();
+            EnemyHealth enemyHealth = GetComponent<EnemyHealth>();
             if (projectile != null)
             {
-                EnemyHealth.TakeDamage(projectile.damage);
+                enemyHealth.TakeDamage(projectile.damage);
             }
         }
 
@@ -35,8 +39,20 @@ public class Enemy : MonoBehaviour
             PlayerHealth playerHealth = collision.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
-                playerHealth.TakeDamage(EnemyDamage);
+                InvokeRepeating("MakeDamageToPlayer",0.0f,0.8f);
             }
         }
+    }
+
+    void OnTriggerExit2D(Collider2D collision){
+        if (collision.gameObject.tag == "Player")
+        {
+            CancelInvoke("MakeDamageToPlayer");
+        }
+    }
+
+    void MakeDamageToPlayer(){
+        PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
+        playerHealth.TakeDamage(EnemyDamage);
     }
 }
