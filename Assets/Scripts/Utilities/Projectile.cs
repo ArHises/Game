@@ -12,7 +12,7 @@ public class Projectile : MonoBehaviour
         Destroy(gameObject, lifetime);
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         // Check if the projectile hits an enemy
         if (collision.CompareTag("Enemy"))
@@ -23,6 +23,7 @@ public class Projectile : MonoBehaviour
             {
                 enemyH.TakeDamage(damage);
             }
+            Debug.Log("Enemy helth: " + enemyH.getCurrentHealth());
             //Destroy the projectile upon impact
             Destroy(gameObject);
         }

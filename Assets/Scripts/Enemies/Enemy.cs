@@ -24,17 +24,7 @@ public class Enemy : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Projectile"))
-        {
-            Projectile projectile = collision.GetComponent<Projectile>();
-            EnemyHealth enemyHealth = GetComponent<EnemyHealth>();
-            if (projectile != null)
-            {
-                enemyHealth.TakeDamage(projectile.damage);
-            }
-        }
-
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player")) // make damage to Player
         {
             PlayerHealth playerHealth = collision.GetComponent<PlayerHealth>();
             if (playerHealth != null)
@@ -44,14 +34,15 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void OnTriggerExit2D(Collider2D collision){
-        if (collision.gameObject.tag == "Player")
+    void OnTriggerExit2D(Collider2D collision){ // make damage while in range
+        if (collision.CompareTag("Player"))
         {
             CancelInvoke("MakeDamageToPlayer");
         }
     }
 
-    void MakeDamageToPlayer(){
+    void MakeDamageToPlayer() // stop making damage when out of range
+    {
         PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
         playerHealth.TakeDamage(EnemyDamage);
     }

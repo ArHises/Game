@@ -29,6 +29,11 @@ public abstract class Health : MonoBehaviour
         }
     }
 
+    public int getCurrentHealth()
+    {
+        return currentHealth;
+    }
+
     protected void InitializeHealth()
     {
         currentHealth = maxHealth;
@@ -36,7 +41,7 @@ public abstract class Health : MonoBehaviour
 
     public virtual void TakeDamage(int damage)
     {
-        coloredTime += 0.15f;
+        coloredTime += 0.05f;
         sr.color = Color.red;
         currentHealth -= damage;
 
