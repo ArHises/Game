@@ -7,8 +7,8 @@ public abstract class Health : MonoBehaviour
     protected int maxHealth = 100;
     protected int currentHealth;
 
-    private float coloredTime = 0.0f;
-    private SpriteRenderer sr;
+    protected float coloredTime = 0.0f;
+    protected SpriteRenderer sr;
 
     protected virtual void Start()
     {

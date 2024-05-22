@@ -27,5 +27,17 @@ public class Projectile : MonoBehaviour
             //Destroy the projectile upon impact
             Destroy(gameObject);
         }
+        if (collision.CompareTag("Object"))
+        {
+            //Deal damage to the object
+            ObjectHealth objectH = collision.GetComponent<ObjectHealth>();
+            if (objectH != null)
+            {
+                objectH.TakeDamage(damage);
+            }
+            Debug.Log("Object helth: " + objectH.getCurrentHealth());
+            //Destroy the projectile upon impact
+            Destroy(gameObject);
+        }
     }
 }
