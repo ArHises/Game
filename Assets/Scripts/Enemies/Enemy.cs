@@ -7,6 +7,8 @@ public class Enemy : MonoBehaviour
     public float moveSpeed = 3f;
     private Transform player;
 
+    public bool isMoving = true;  // Flag to check if the object is moving
+
     void Start()
     {
         if (GameObject.FindGameObjectWithTag("Player") != null) {
@@ -16,9 +18,14 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        if (player != null) {
+        if (player != null && isMoving)
+        {
             Vector2 direction = (player.position - transform.position).normalized;
             GetComponent<Rigidbody2D>().velocity = direction * moveSpeed;
+        }
+        else
+        {
+            GetComponent<Rigidbody2D>().velocity = new Vector2(0f,0f);
         }
     }
 
@@ -45,5 +52,10 @@ public class Enemy : MonoBehaviour
     {
         PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
         playerHealth.TakeDamage(EnemyDamage);
+    }
+
+    public void SetIsMoving(bool state)
+    {
+        isMoving = state;
     }
 }
